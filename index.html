@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+  <title>IMDB List</title>
+</head>
+
+<body>
+  <div id="app">
+    <div class="title">
+      <h1>IMDB List</h1>
+    </div>
+    <div class="app-container flx">
+      <div class="form">
+        <textarea v-model="movies" cols="30" rows="10"></textarea>
+        <div class="btns">
+          <button @click="moviesIMDB" class="btn-load">LOAd</button>
+          <button id="grid" class="btn-load">Grid</button>
+          <button id="download" class="btn-load">Download</button>
+        </div>
+      </div>
+    
+      <div class="checks">
+        <span class="checks-title">Attributes:</span>
+        <div class="checks-list">
+          <div class="check-att">
+            <input type="checkbox" value="year" v-model="year">
+            <label for="year">Year</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="rated" v-model="rated">
+            <label for="rated">Rated</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="released" v-model="released">
+            <label for="released">Released</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="runtime" v-model="runtime">
+            <label for="runtime">Runtime</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="genre" v-model="genre">
+            <label for="genre">Genre</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="director" v-model="director">
+            <label for="director">Director</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="writer" v-model="writer">
+            <label for="writer">Writer</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="actors" v-model="actors">
+            <label for="actors">Actors</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="plot" v-model="plot">
+            <label for="plot">Plot</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="language" v-model="language">
+            <label for="language">Language</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="country" v-model="country">
+            <label for="country">Country</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="awards" v-model="awards">
+            <label for="awards">Awards</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="boxoffice" v-model="boxoffice">
+            <label for="boxoffice">BoxOffice</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="ratings" v-model="ratings">
+            <label for="ratings">Ratings</label>
+          </div>
+          <div class="check-att">
+            <input type="checkbox" value="votes" v-model="votes">
+            <label for="votes">IMDB Votes</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="movieslist">
+      <div class="app-container movies-list">
+        <div class="row">
+          <div v-for="(valor, chave) in imdb" class="rcol-md-2">
+            <div class="movies-item">
+              <div class="number">{{chave+1}}</div>
+              <figure :style="{backgroundImage: 'url('+valor.Poster+')'}" class="movie-fig">
+                <a :href="valor.Poster" target="_blank"><img :src="valor.Poster" :alt="valor.Title"></a>
+              </figure>
+
+              <div class="movies-content">
+                <div><strong>Title: </strong><span @click="clipboard">{{valor.Title}}</span></div>
+                <div><strong>ID: </strong><span @click="clipboard">{{valor.imdbID}}</span></div>
+                <div v-show="year"><strong>Year: </strong><span @click="clipboard">{{valor.Year}}</span></div>
+                <div v-show="rated"><strong>Rated: </strong><span @click="clipboard">{{valor.Rated}}</span></div>
+                <div v-show="released"><strong>Released: </strong><span @click="clipboard">{{valor.Released}}</span></div>
+                <div v-show="runtime"><strong>Runtime: </strong><span @click="clipboard">{{valor.Runtime}}</span></div>
+                <div v-show="genre"><strong>Genre: </strong><span @click="clipboard">{{valor.Genre}}</span></div>
+                <div v-show="director"><strong>Director: </strong><span @click="clipboard">{{valor.Director}}</span></div>
+                <div v-show="writer"><strong>Writer: </strong><span @click="clipboard">{{valor.Writer}}</span></div>
+                <div v-show="actors"><strong>Actors: </strong><span @click="clipboard">{{valor.Actors}}</span></div>
+                <div v-show="plot"><strong>Plot: </strong><span @click="clipboard">{{valor.Plot}}</span></div>
+                <div v-show="language"><strong>Language: </strong><span @click="clipboard">{{valor.Language}}</span></div>
+                <div v-show="country"><strong>Country: </strong><span @click="clipboard">{{valor.Country}}</span></div>
+                <div v-show="awards"><strong>Awards: </strong><span @click="clipboard">{{valor.Awards}}</span></div>
+                <div v-show="boxoffice"><strong>BoxOffice: </strong><span @click="clipboard">{{valor.BoxOffice}}</span></div>
+                <div v-show="ratings">
+                  <div v-for="(ratings, chave) in valor.Ratings">
+                  <strong>Ratings {{ratings.Source}}: </strong><span @click="clipboard">{{ratings.Value}}</span>
+                </div>
+                </div>
+                <div v-show="votes"><strong>IMDB Votes: </strong><span @click="clipboard">{{valor.imdbVotes}}</span></div>
+              </div>
+              <!--<pre>
+              {{valor}}
+              </pre>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const vm = new Vue({
+      el: "#app",
+      data: {
+        year: false,
+        rated: false, 
+        released: false, 
+        runtime: false, 
+        genre: false, 
+        director: false, 
+        writer: false, 
+        actors: false, 
+        plot: false, 
+        language: false, 
+        country: false,
+        awards: false, 
+        boxoffice: false, 
+        ratings: false,
+        votes: false,
+        checkedAtt: [],
+        movies: "",
+        imdb: {},
+      },
+      methods: {
+        moviesIMDB() {
+          const moviesList = this.movies.split('\n');
+          const imdbList = [];
+          const promises = moviesList.map(function(movie) {
+            return fetch(`https://www.omdbapi.com/?apikey=645113e4&t=${movie}`)
+              .then(r => r.json())
+          });
+          Promise.all(promises)
+            .then((results) => {
+              imdbList.push(...results);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          this.imdb = imdbList;
+        },
+        clipboard(event) {
+          navigator.clipboard.writeText(event.path[0].innerHTML);
+        },
+      },
+    });
+  </script>
+  <script>
+    const grid = document.getElementById('grid');
+    const movieslist = document.getElementById('movieslist');
+    const download = document.getElementById('download');
+
+    grid.addEventListener('click', () => {
+      movieslist.classList.toggle("nogrid");
+    });
+
+    download.addEventListener('click', function() {
+      domtoimage.toJpeg(movieslist, { quality: 1 })
+      .then(function (dataUrl) {
+          var link = document.createElement('a');
+          link.download = 'melhore-filmes-de-2022.jpeg';
+          link.href = dataUrl;
+          link.click();
+      });
+    });
+  </script>
+</body>
+</html
